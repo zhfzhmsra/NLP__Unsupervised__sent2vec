@@ -533,6 +533,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   }
 
   int32_t i = 0;
+  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
   while (i < k && heap.size() > 0) {
     auto it = banSet.find(heap.top().second);
     //if (!std::isnan(heap.top().first))
