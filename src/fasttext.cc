@@ -604,6 +604,7 @@ void FastText::nnSent(int32_t k, std::string filename) {
         sentences.push_back(sentence);
 		n++;
   }
+  std::cout << "zhfzh" << std::endl;
   std::cout << "Number of sentences in the corpus file is " << n << "." << std::endl ;
   Matrix sentenceVectors(n+1, args_->dim);
 
