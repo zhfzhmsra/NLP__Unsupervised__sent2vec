@@ -524,10 +524,12 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   std::priority_queue<std::pair<real, std::string>> heap;
   Vector vec(args_->dim);
 
+  std::cout << "zhfzh_begin_find: "<< std::endl;
   for (int32_t i = 0; i < numSent; i++) {
 	std::string sentence = std::to_string(i) + " " + sentences[i];
     real dp = sentenceVectors.dotRow(queryVec, i);
     heap.push(std::make_pair(dp / queryNorm, sentence));
+    std::cout << "zhfzh_find: " << i << std::endl;
   }
 
   int32_t i = 0;
