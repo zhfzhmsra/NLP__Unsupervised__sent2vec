@@ -50,7 +50,7 @@ def tokenize_sentences(tknzr, sentences, to_lower=True):
 
 fileName = sys.argv[1]
 
-SNLP_TAGGER_JAR = "/home/pgupta/stanford-postagger.jar"
+SNLP_TAGGER_JAR = "/mnt/fuz/codes/NLP__Unsupervised__sent2vec/stanford-postagger.jar"
 
 
 sentences = []
