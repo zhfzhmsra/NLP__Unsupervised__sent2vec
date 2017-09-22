@@ -20,6 +20,7 @@
 #include <queue>
 #include <algorithm>
 #include <stdio.h>
+#include <fstream>
 
 
 namespace fasttext {
@@ -542,19 +543,28 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
-  int32_t i = 0;
-  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
-  while (i < k && heap.size() > 0) {
-    //auto it = banSet.find(heap.top().second);
-    if (!std::isnan(heap.top().first))
-    {
-      std::cout << heap.top().first << " "
-				<< heap.top().second << " " 
-				<< std::endl;
-      i++;
-    }
+  std::ofstream outputFile;
+  outputFile.open("ranked_output.txt");
+  int32_t tmp_i = 0;
+  while (heap.size() > 0){
+    outputFile << heap.top().first << " " << heap.top().second << std::endl;
     heap.pop();
   }
+
+
+//  int32_t i = 0;
+//  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
+//  while (i < k && heap.size() > 0) {
+//    //auto it = banSet.find(heap.top().second);
+//    if (!std::isnan(heap.top().first))
+//    {
+//      std::cout << heap.top().first << " "
+//				<< heap.top().second << " "
+//				<< std::endl;
+//      i++;
+//    }
+//    heap.pop();
+//  }
 }
 
 
