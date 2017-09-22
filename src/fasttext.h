@@ -48,6 +48,13 @@ class FastText {
     void signModel(std::ostream&);
     bool checkModel(std::istream&);
 
+    struct CompareByFirst {
+        constexpr bool operator()(std::pair<int, std::string> const & a,
+                                  std::pair<int, std::string> const & b) const noexcept
+        { return a.first < b.first; }
+    };
+
+
     bool quant_;
 
   public:

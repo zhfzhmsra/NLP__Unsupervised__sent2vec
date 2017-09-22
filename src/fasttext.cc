@@ -512,6 +512,8 @@ void FastText::findNN(const Matrix& wordVectors, const Vector& queryVec,
   }
 }
 
+
+
 void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
                       int32_t k, const std::set<std::string>& banSet, int64_t numSent, const std::vector<std::string>& sentences) {
   real queryNorm = queryVec.norm();
@@ -522,8 +524,18 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   if (std::abs(queryNorm) < 1e-8) {
     queryNorm = 1;
   }
-  std::priority_queue<std::pair<real, std::string>> heap;
-  std::priority_queue<std::pair<real, std::string>> heap_backup;
+
+//  std::priority_queue<std::pair<real, std::string>> heap;
+//  std::priority_queue<std::pair<real, std::string>> heap_backup;
+
+  std::priority_queue<std::pair<int, std::string>,
+          std::vector<std::pair<int, std::string>>,
+          CompareByFirst> heap;
+  std::priority_queue<std::pair<int, std::string>,
+          std::vector<std::pair<int, std::string>>,
+          CompareByFirst> heap_backup;
+
+
   Vector vec(args_->dim);
 
   for (int32_t i = 0; i < numSent; i++) {
