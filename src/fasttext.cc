@@ -523,6 +523,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     queryNorm = 1;
   }
   std::priority_queue<std::pair<real, std::string>> heap;
+  std::priority_queue<std::pair<real, std::string>> heap_backup;
   Vector vec(args_->dim);
 
   for (int32_t i = 0; i < numSent; i++) {
@@ -540,31 +541,38 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     real dp = sentenceVectors.dotRow(queryVec, i);
 
     heap.push(std::make_pair(dp / queryNorm, sentence));
+    heap_backup.push(std::make_pair(dp / queryNorm, sentence))
     //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
   std::ofstream outputFile;
   outputFile.open("ranked_output.txt");
   int32_t tmp_i = 0;
-  while (heap.size() > 0){
-    outputFile << heap.top().first << " " << heap.top().second << std::endl;
-    heap.pop();
+  while (heap_backup.size() > 0){
+    if (!std::isnan(heap.top().first)){
+      outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
+      tmp_i++;
+      if (tmp_i > 200)
+        break;
+    }
+    heap_backup.pop();
   }
   outputFile.close();
 
-//  int32_t i = 0;
-//  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
-//  while (i < k && heap.size() > 0) {
-//    //auto it = banSet.find(heap.top().second);
-//    if (!std::isnan(heap.top().first))
-//    {
-//      std::cout << heap.top().first << " "
-//				<< heap.top().second << " "
-//				<< std::endl;
-//      i++;
-//    }
-//    heap.pop();
-//  }
+
+  int32_t i = 0;
+  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
+  while (i < k && heap.size() > 0) {
+    //auto it = banSet.find(heap.top().second);
+    if (!std::isnan(heap.top().first))
+    {
+      std::cout << heap.top().first << " "
+				<< heap.top().second << " "
+				<< std::endl;
+      i++;
+    }
+    heap.pop();
+  }
 }
 
 
