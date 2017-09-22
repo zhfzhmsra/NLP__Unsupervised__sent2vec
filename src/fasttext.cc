@@ -550,7 +550,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   int32_t tmp_i = 0;
   std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
   while (heap_backup.size() > 0){
-    if (!std::isnan(heap.top().first)){
+    if (!std::isnan(heap_backup.top().first)){
       outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
       std::cout << "output to file" << " "
                 << "thread:" << std::this_thread::get_id() << " "
@@ -562,6 +562,14 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
         break;
     }
     heap_backup.pop();
+//    if (tmp_i % 100 == 0)
+//    {
+//      std::cout << "check" << " "
+//                << "rank:" << tmp_i << " "
+//                << "first:" << heap_backup.top().first
+//                << std::endl;
+//
+//    }
   }
   outputFile.close();
 
