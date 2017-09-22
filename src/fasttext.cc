@@ -551,8 +551,13 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   while (heap_backup.size() > 0){
     if (!std::isnan(heap.top().first)){
       outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
+      std::cout << "output to file" << " "
+                << "thread:" << std::this_thread::get_id() << " "
+                << "rank:" << tmp_i
+                << std::endl;
+
       tmp_i++;
-      if (tmp_i > 200)
+      if (tmp_i > 100)
         break;
     }
     heap_backup.pop();
@@ -566,7 +571,9 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     //auto it = banSet.find(heap.top().second);
     if (!std::isnan(heap.top().first))
     {
-      std::cout << i << " " << heap.top().first << " "
+      std::cout << "thread:" << std::this_thread::get_id() << " "
+                << "rank:" << i << " "
+                << heap.top().first << " "
 				<< heap.top().second << " "
 				<< std::endl;
       i++;
