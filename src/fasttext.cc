@@ -528,24 +528,24 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
 	std::string sentence = std::to_string(i) + " " + sentences[i];
 
     //begin zhfzh
-    real sentenceNorm = sentenceVectors.l2NormRow(i);
-    if (std::abs(sentenceNorm) < 1e-8) {
-      sentenceNorm = 1;
-    }
+//    real sentenceNorm = sentenceVectors.l2NormRow(i);
+//    if (std::abs(sentenceNorm) < 1e-8) {
+//      sentenceNorm = 1;
+//    }
     //end zhfzh
 
 
 
     real dp = sentenceVectors.dotRow(queryVec, i);
 
-    //heap.push(std::make_pair(dp / queryNorm, sentence));
-    heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
+    heap.push(std::make_pair(dp / queryNorm, sentence));
+    //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
   int32_t i = 0;
   std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
   while (i < k && heap.size() > 0) {
-    auto it = banSet.find(heap.top().second);
+    //auto it = banSet.find(heap.top().second);
     if (!std::isnan(heap.top().first))
     {
       std::cout << heap.top().first << " "
