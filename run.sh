@@ -20,5 +20,6 @@
 
 nnMultipleSents ../models/model.bin ../corpus.txt ../user.txt 30
 
+./fasttext nnMultipleSents models/train_all_titles.model.bin data/candidate_all_titles.txt user.txt 30
 
 #python wikiTokenize.py data/train_all_titles.txt > data/train_all_titles.tokens
