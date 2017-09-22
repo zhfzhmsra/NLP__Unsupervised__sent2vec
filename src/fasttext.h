@@ -95,6 +95,7 @@ class FastText {
     void nn(int32_t);
     void analogies(int32_t);
     void nnSent(int32_t, std::string );
+    void nnMultipleSents(int32_t, std::string, std::string);
     void analogiesSent(int32_t, std::string );
 
     void loadVectors(std::string);

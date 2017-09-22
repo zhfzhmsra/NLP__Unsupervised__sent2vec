@@ -112,6 +112,7 @@ void printNNSentUsage() {
     std::cout<<"NOTE : A corpus file is required to find similar sentences."<<std::endl;
 }
 
+
 void printAnalogiesUsage() {
   std::cout
     << "usage: fasttext analogies <model> <k>\n\n"
@@ -254,6 +255,22 @@ void nnSent(int argc, char** argv) {
 }
 
 
+void nnMultipleSents(int argc, char** argv) {
+  int32_t k;
+  if (argc == 5) {
+    k = 10;
+  } else if (argc == 6) {
+    k = atoi(argv[5]);
+  } else {
+    //printNNSentUsage();
+    exit(EXIT_FAILURE);
+  }
+  FastText fasttext;
+  fasttext.loadModel(std::string(argv[2]));
+  fasttext.nnMultipleSents(k,std::string(argv[3]),std::string(argv[4]));
+  exit(0);
+}
+
 void analogies(int argc, char** argv) {
   int32_t k;
   if (argc == 3) {
@@ -316,7 +333,10 @@ int main(int argc, char** argv) {
     nn(argc, argv);
   } else if (command == "nnSent") {
     nnSent(argc, argv);
-  } else if (command == "analogies") {
+  } else if (command == "nnMultipleSents"){
+    nnMultipleSents(argc, argv);
+  }
+    else if (command == "analogies") {
     analogies(argc, argv);
   } else if (command == "analogiesSent") {
     analogiesSent(argc, argv);

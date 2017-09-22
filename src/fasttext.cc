@@ -531,9 +531,10 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   std::priority_queue<std::pair<real, std::string>,
           std::vector<std::pair<real, std::string>>,
           CompareByFirst> heap;
-  std::priority_queue<std::pair<real, std::string>,
-          std::vector<std::pair<real, std::string>>,
-          CompareByFirst> heap_backup;
+
+//  std::priority_queue<std::pair<real, std::string>,
+//          std::vector<std::pair<real, std::string>>,
+//          CompareByFirst> heap_backup;
 
 
   Vector vec(args_->dim);
@@ -553,37 +554,37 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     real dp = sentenceVectors.dotRow(queryVec, i);
 
     heap.push(std::make_pair(dp / queryNorm, sentence));
-    heap_backup.push(std::make_pair(dp / queryNorm, sentence));
+    //heap_backup.push(std::make_pair(dp / queryNorm, sentence));
     //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
-  std::ofstream outputFile;
-  outputFile.open("ranked_output.txt");
-  int32_t tmp_i = 0;
-  std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
-  while (heap_backup.size() > 0){
-    if (!std::isnan(heap_backup.top().first)){
-      outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
-      std::cout << "output to file" << " "
-                << "thread:" << std::this_thread::get_id() << " "
-                << "rank:" << tmp_i
-                << std::endl;
-
-      tmp_i++;
-      if (tmp_i > 100)
-        break;
-    }
-    heap_backup.pop();
-//    if (tmp_i % 100 == 0)
-//    {
-//      std::cout << "check" << " "
-//                << "rank:" << tmp_i << " "
-//                << "first:" << heap_backup.top().first
+//  std::ofstream outputFile;
+//  outputFile.open("ranked_output.txt");
+//  int32_t tmp_i = 0;
+//  std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
+//  while (heap_backup.size() > 0){
+//    if (!std::isnan(heap_backup.top().first)){
+//      outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
+//      std::cout << "output to file" << " "
+//                << "thread:" << std::this_thread::get_id() << " "
+//                << "rank:" << tmp_i
 //                << std::endl;
 //
+//      tmp_i++;
+//      if (tmp_i > 100)
+//        break;
 //    }
-  }
-  outputFile.close();
+//    heap_backup.pop();
+////    if (tmp_i % 100 == 0)
+////    {
+////      std::cout << "check" << " "
+////                << "rank:" << tmp_i << " "
+////                << "first:" << heap_backup.top().first
+////                << std::endl;
+////
+////    }
+//  }
+//  outputFile.close();
 
 
   int32_t i = 0;
@@ -592,9 +593,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     //auto it = banSet.find(heap.top().second);
     if (!std::isnan(heap.top().first))
     {
-      std::cout << "thread:" << std::this_thread::get_id() << " "
-                << "rank:" << i << " "
-                << heap.top().first << " "
+      std::cout << heap.top().first << " "
 				<< heap.top().second << " "
 				<< std::endl;
       i++;
@@ -664,7 +663,7 @@ void FastText::nnSent(int32_t k, std::string filename) {
         sentences.push_back(sentence);
 		n++;
   }
-  std::cout << "zhfzh" << std::endl;
+  //std::cout << "zhfzh" << std::endl;
   std::cout << "Number of sentences in the corpus file is " << n << "." << std::endl ;
   Matrix sentenceVectors(n+1, args_->dim);
 
@@ -690,6 +689,58 @@ void FastText::nnSent(int32_t k, std::string filename) {
     std::cerr << "Query sentence? " << std::endl;
   }
 }
+
+void FastText::nnMultipleSents(int32_t k, std::string filename, std::string query_filename) {
+      std::string sentence;
+      std::ifstream in1(filename);
+      int64_t n = 0;
+
+      Vector buffer(args_->dim), query(args_->dim);
+      std::vector<std::string> sentences;
+
+      std::vector<int32_t> line, labels;
+      std::ifstream in2(filename);
+
+      while (in2.peek() != EOF) {
+        std::getline(in2, sentence);
+        sentences.push_back(sentence);
+        n++;
+      }
+      std::cout << "Number of sentences in the corpus file is " << n << "." << std::endl ;
+      Matrix sentenceVectors(n+1, args_->dim);
+
+      precomputeSentenceVectors(sentenceVectors, in1);
+      std::set<std::string> banSet;
+
+
+      std::vector<std::string> query_sentences;
+      std::ifstream in_query_2(query_filename);
+      int64_t query_n = 0;
+      while (in_query_2.peek() != EOF) {
+        std::getline(in_query_2, sentence);
+        query_sentences.push_back(sentence);
+        query_n++;
+      }
+
+      int64_t query_i = 0;
+      std::ifstream in_query_1(query_filename);
+      query.zero();
+      while (query_i < query_n){
+        dict_->getLine(in_query_1, line, labels, model_->rng);
+        dict_->addNgrams(line, args_->wordNgrams);
+        buffer.zero();
+        for (auto it = line.cbegin(); it != line.cend(); ++it) {
+          buffer.addRow(*input_, *it);
+        }
+        if (!line.empty()) {
+          buffer.mul(1.0 / line.size());
+        }
+        query.addVector(buffer, 1.0 / n);
+        query_i++;
+      }
+      findNNSent(sentenceVectors, query, k, banSet, n, sentences);
+      std::cout << std::endl;
+    }
 
 
 void FastText::analogiesSent(int32_t k, std::string filename) {

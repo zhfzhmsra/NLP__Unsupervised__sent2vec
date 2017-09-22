@@ -18,5 +18,7 @@
 ./fasttext sent2vec -input data/train_all_content.txt -output models/train_all_content.model -minCount 8 -dim 700 -epoch 9 -lr 0.2 -wordNgrams 2 -loss ns -neg 10 -thread 20 -t 0.000005 -dropoutK 4 -minCountLabel 20 -bucket 4000000
 
 
+nnMultipleSents ../models/model.bin ../corpus.txt ../user.txt 30
+
 
 #python wikiTokenize.py data/train_all_titles.txt > data/train_all_titles.tokens
