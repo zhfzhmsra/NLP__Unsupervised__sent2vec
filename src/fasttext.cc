@@ -528,11 +528,11 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
 //  std::priority_queue<std::pair<real, std::string>> heap;
 //  std::priority_queue<std::pair<real, std::string>> heap_backup;
 
-  std::priority_queue<std::pair<int, std::string>,
-          std::vector<std::pair<int, std::string>>,
+  std::priority_queue<std::pair<real, std::string>,
+          std::vector<std::pair<real, std::string>>,
           CompareByFirst> heap;
-  std::priority_queue<std::pair<int, std::string>,
-          std::vector<std::pair<int, std::string>>,
+  std::priority_queue<std::pair<real, std::string>,
+          std::vector<std::pair<real, std::string>>,
           CompareByFirst> heap_backup;
 
 

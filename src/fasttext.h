@@ -49,8 +49,8 @@ class FastText {
     bool checkModel(std::istream&);
 
     struct CompareByFirst {
-        constexpr bool operator()(std::pair<int, std::string> const & a,
-                                  std::pair<int, std::string> const & b) const noexcept
+        constexpr bool operator()(std::pair<real, std::string> const & a,
+                                  std::pair<real, std::string> const & b) const noexcept
         { return a.first < b.first; }
     };
 
