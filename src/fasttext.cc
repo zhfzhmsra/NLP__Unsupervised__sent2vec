@@ -548,6 +548,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
   std::ofstream outputFile;
   outputFile.open("ranked_output.txt");
   int32_t tmp_i = 0;
+  std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
   while (heap_backup.size() > 0){
     if (!std::isnan(heap.top().first)){
       outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
