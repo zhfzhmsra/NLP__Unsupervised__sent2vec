@@ -550,7 +550,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     outputFile << heap.top().first << " " << heap.top().second << std::endl;
     heap.pop();
   }
-
+  outputFile.close();
 
 //  int32_t i = 0;
 //  std::cout << "k=" << k << ", heap.size=" << heap.size() << std::endl;
