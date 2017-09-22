@@ -532,9 +532,9 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
           std::vector<std::pair<real, std::string>>,
           CompareByFirst> heap;
 
-//  std::priority_queue<std::pair<real, std::string>,
-//          std::vector<std::pair<real, std::string>>,
-//          CompareByFirst> heap_backup;
+  std::priority_queue<std::pair<real, std::string>,
+          std::vector<std::pair<real, std::string>>,
+          CompareByFirst> heap_backup;
 
 
   Vector vec(args_->dim);
@@ -558,33 +558,25 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
-//  std::ofstream outputFile;
-//  outputFile.open("ranked_output.txt");
-//  int32_t tmp_i = 0;
-//  std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
-//  while (heap_backup.size() > 0){
-//    if (!std::isnan(heap_backup.top().first)){
-//      outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
+  std::ofstream outputFile;
+  outputFile.open("ranked_output.txt");
+  int32_t tmp_i = 0;
+  std::cout << "heap_backup.size(): " << heap_backup.size() << std::endl;
+  while (heap_backup.size() > 0){
+    if (!std::isnan(heap_backup.top().first)){
+      outputFile << heap_backup.top().first << " " << heap_backup.top().second << std::endl;
 //      std::cout << "output to file" << " "
 //                << "thread:" << std::this_thread::get_id() << " "
 //                << "rank:" << tmp_i
 //                << std::endl;
-//
-//      tmp_i++;
-//      if (tmp_i > 100)
-//        break;
-//    }
-//    heap_backup.pop();
-////    if (tmp_i % 100 == 0)
-////    {
-////      std::cout << "check" << " "
-////                << "rank:" << tmp_i << " "
-////                << "first:" << heap_backup.top().first
-////                << std::endl;
-////
-////    }
-//  }
-//  outputFile.close();
+
+      tmp_i++;
+      if (tmp_i > 1000)
+        break;
+    }
+    heap_backup.pop();
+  }
+  outputFile.close();
 
 
   int32_t i = 0;
