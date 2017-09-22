@@ -554,7 +554,7 @@ void FastText::findNNSent(const Matrix& sentenceVectors, const Vector& queryVec,
     real dp = sentenceVectors.dotRow(queryVec, i);
 
     heap.push(std::make_pair(dp / queryNorm, sentence));
-    //heap_backup.push(std::make_pair(dp / queryNorm, sentence));
+    heap_backup.push(std::make_pair(dp / queryNorm, sentence));
     //heap.push(std::make_pair(dp / (sentenceNorm * queryNorm), sentence));
   }
 
