@@ -402,6 +402,67 @@ void FastText::sentenceVectors() {
   }
 }
 
+void FastText::sentenceVectorsToFile(std::string input_filename, std::string output_filename) {
+  Vector vec(args_->dim);
+  std::string line;
+  Vector svec(args_->dim);
+  std::string word;
+
+
+  std::ifstream in_input(input_filename);
+  int64_t n = 0;
+
+  std::vector<std::string> sentences;
+  std::string split_str = "\t";
+
+
+  std::ofstream outputFile;
+  outputFile.open(output_filename);
+
+
+  while (in_input.peek() != EOF) {
+    std::getline(in_input, line);
+    //sentences.push_back(sentence);
+    n++;
+    std::vector< std::string > split_strs;
+    utils::split(line,split_str, &split_strs);
+    std::vector<std::string>::iterator it = split_strs.begin();
+    std::string key = *it;
+    it++;
+    std::string sentence = *it;
+
+    //std::cout << "key:" << key << "\tsetence:" << sentence << std::endl;
+
+    std::istringstream iss(sentence);
+    svec.zero();
+    int32_t count = 0;
+    while(iss >> word) {
+      getVector(vec, word);
+      vec.mul(1.0 / vec.norm());
+      svec.addVector(vec);
+      count++;
+    }
+    svec.mul(1.0 / count);
+    outputFile << key << "\t" << svec << std::endl;
+  }
+
+  outputFile.close();
+
+//  while (std::getline(std::cin, sentence)) {
+//    std::istringstream iss(sentence);
+//    svec.zero();
+//    int32_t count = 0;
+//    while(iss >> word) {
+//      getVector(vec, word);
+//      vec.mul(1.0 / vec.norm());
+//      svec.addVector(vec);
+//      count++;
+//    }
+//    svec.mul(1.0 / count);
+//    std::cout << sentence << " " << svec << std::endl;
+//  }
+}
+
 void FastText::ngramVectors(std::string word) {
   std::vector<int32_t> ngrams;
   std::vector<std::string> substrings;
@@ -447,6 +508,16 @@ void FastText::printSentenceVectors() {
   } else {
     sentenceVectors();
   }
+}
+
+
+void FastText::printSentenceVectorsToFile(std::string input_filename, std::string output_filename) {
+//  if (args_->model == model_name::sup || args_->model == model_name::sent2vec) {
+//    textVectors();
+//  } else {
+//    sentenceVectorsToFile(input_filename, output_filename);
+//  }
+  sentenceVectorsToFile(input_filename, output_filename);
 }
 
 void FastText::precomputeWordVectors(Matrix& wordVectors) {

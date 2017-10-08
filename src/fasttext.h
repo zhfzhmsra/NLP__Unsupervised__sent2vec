@@ -80,10 +80,12 @@ class FastText {
     void predict(std::istream&, int32_t, std::vector<std::pair<real,std::string>>&) const;
     void wordVectors();
     void sentenceVectors();
+    void sentenceVectorsToFile(std::string,std::string);
     void ngramVectors(std::string);
     void textVectors();
     void printWordVectors();
     void printSentenceVectors();
+    void printSentenceVectorsToFile(std::string,std::string);
     void trainThread(int32_t);
     void train(std::shared_ptr<Args>);
     void precomputeWordVectors(Matrix&);

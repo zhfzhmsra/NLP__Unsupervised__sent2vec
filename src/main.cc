@@ -211,6 +211,19 @@ void printSentenceVectors(int argc, char** argv) {
   exit(0);
 }
 
+void printSentenceVectorsToFile(int argc, char** argv) {
+  if (argc != 5) {
+    printPrintSentenceVectorsUsage();
+    exit(EXIT_FAILURE);
+  }
+  FastText fasttext;
+  fasttext.loadModel(std::string(argv[2]));
+  fasttext.printSentenceVectorsToFile(argv[3],argv[4]);
+  exit(0);
+}
+
+
+
 void printNgrams(int argc, char** argv) {
   if (argc != 4) {
     printPrintNgramsUsage();
@@ -327,7 +340,10 @@ int main(int argc, char** argv) {
     printWordVectors(argc, argv);
   } else if (command == "print-sentence-vectors") {
     printSentenceVectors(argc, argv);
-  } else if (command == "print-ngrams") {
+  } else if (command == "infer-sentence-vectors-toFile") {
+    printSentenceVectorsToFile(argc, argv);
+  }
+    else if (command == "print-ngrams") {
     printNgrams(argc, argv);
   } else if (command == "nn") {
     nn(argc, argv);

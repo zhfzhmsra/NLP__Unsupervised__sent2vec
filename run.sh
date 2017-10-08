@@ -23,3 +23,10 @@ nnMultipleSents ../models/model.bin ../corpus.txt ../user.txt 30
 ./fasttext nnMultipleSents models/train_all_titles.model.bin data/candidate_all_titles.txt user.txt 30
 
 #python wikiTokenize.py data/train_all_titles.txt > data/train_all_titles.tokens
+
+
+
+#run sample data
+./fasttext sent2vec -input ../train_docs.txt -output ../models/model_sample -minCount 8 -dim 100 -epoch 9 -lr 0.2 -wordNgrams 2 -loss ns -neg 10 -thread 4 -t 0.000005 -dropoutK 4 -minCountLabel 20 -bucket 10000
+./fasttext print-sentence-vectors ../models/model_sample.bin < ../corpus.txt
+./fasttext infer-sentence-vectors-toFile ../models/model_sample.bin ../url_corpus_sample.txt ../url_corpus_sample_vectors.txt
